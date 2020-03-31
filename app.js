@@ -6,6 +6,7 @@ const cardBack = `images/card${cardColor}.png`;
 const revealedCards = [];                                                    // Array of the _revealed_ cards
 const cardNames = [];                                                         // Array of all the available cards
 const scoreBoard = document.querySelector('#score');
+let score = 0;
 
 
 function generateCards() {                                              // Puts duplicates of every card into an array and randomizes order
@@ -29,17 +30,36 @@ function populateCards(){                                                   // C
 }
 
 function revealCard(e){                                                     // Flips the card over
-    let selectedCard = e.target.dataset.card;
-    e.target.setAttribute('src', `images/${selectedCard}.png`);             // Shows card image associated with data-card
+    let selectedCard = {card: e.target.dataset.card, index: e.target.dataset.index};
+    e.target.setAttribute('src', `images/${selectedCard.card}.png`);             // Shows card image associated with data-card
     revealedCards.push(selectedCard);
     if (revealedCards.length === 2){
         checkMatch();
-        revealedCards.length = 0;
     }    
 }
 
 function checkMatch(){
-    console.log(cardNames.item(index));
+    if(revealedCards[0].card === revealedCards[1].card){                                // If the two selections match, run victory conditions
+        matchSuccess();
+        score++;
+        scoreBoard.textContent = score;
+    }else{                                                                              // If they don't match, run fail conditions
+        setTimeout(matchFail, 500);
+    }
+}
+
+function matchFail(){                                                                   // Reverts card back to original state and resets revealedCards array
+    const displayedCard = document.querySelectorAll('.card');
+    displayedCard[revealedCards[0].index].setAttribute('src', cardBack);
+    displayedCard[revealedCards[1].index].setAttribute('src', cardBack);
+    revealedCards.length = 0;
+}
+
+function matchSuccess(){                                                                // Applies victory styling to selected cards and resets revealedCards array
+    const displayedCard = document.querySelectorAll('.card');
+    displayedCard[revealedCards[0].index].classList.add('success');
+    displayedCard[revealedCards[1].index].classList.add('success');
+    revealedCards.length = 0;
 }
 
 generateCards();
