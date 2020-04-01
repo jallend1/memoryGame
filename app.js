@@ -1,16 +1,22 @@
 //  Cards from http://acbl.mybigcommerce.com/52-playing-cards/
 
 const gameArea = document.querySelector('#gamearea');
+const formDifficulty = document.querySelector('#challenge');
+const button = document.querySelector('button');
+const scoreBoard = document.querySelector('#score');
+
+
+let difficulty = formDifficulty.difficulty.value;
 let cardColor = 'green';
 const cardBack = `images/card${cardColor}.png`;
 const revealedCards = [];                                                    // Array of the _revealed_ cards
 const cardNames = [];                                                         // Array of all the available cards
-const scoreBoard = document.querySelector('#score');
 let score = 0;
 
 
 function generateCards() {                                              // Puts duplicates of every card into an array and randomizes order
-    for(let i = 1; i < 14; i++){
+    cardNames.length = 0;
+    for(let i = 1; i < difficulty; i++){
         cardNames.push(`${i}C`, `${i}C`);
         cardNames.push(`${i}H`, `${i}H`);        
     }
@@ -41,8 +47,7 @@ function revealCard(e){                                                     // F
 function checkMatch(){
     if(revealedCards[0].card === revealedCards[1].card){                                // If the two selections match, run victory conditions
         matchSuccess();
-        score++;
-        scoreBoard.textContent = score;
+        updateScore(score);
     }else{                                                                              // If they don't match, run fail conditions
         setTimeout(matchFail, 500);
     }
@@ -60,7 +65,36 @@ function matchSuccess(){                                                        
     displayedCard[revealedCards[0].index].classList.add('success');
     displayedCard[revealedCards[1].index].classList.add('success');
     revealedCards.length = 0;
+    score++;
 }
 
-generateCards();
-populateCards();
+function changeDifficulty(e){
+    if (e.target.value){
+        difficulty = e.target.value;
+    }
+    resetGame();
+}
+
+function clearCards(){
+    for(let i = 0; i < gameArea.children.length; i++){
+        const displayedCard = document.querySelectorAll('.card');
+        displayedCard.forEach(card => card.remove());
+    }
+}
+
+function resetGame(){
+    clearCards();
+    generateCards();
+    populateCards();
+    score = 0;
+    updateScore(score);
+}
+
+function updateScore(newScore){                                                         // Updates score on screen
+    scoreBoard.textContent = newScore;
+}
+
+formDifficulty.addEventListener('click', e => changeDifficulty(e));
+button.addEventListener('click', resetGame);
+
+resetGame();
