@@ -97,8 +97,9 @@ function resetGame(){
     populateCards();
     score = 0;
     updateScore(score);
-    timer(120);
+    timer(5);
 }
+
 
 function updateScore(newScore){                                                         // Updates score on screen
     scoreBoard.textContent = newScore;
@@ -116,11 +117,18 @@ function changeCardColor(){
     })
 }
 
+
+
 function timer(seconds){
-    setInterval(function (){
+    const countdownID = setInterval(() => {
         seconds--;
-        timeLeft.textContent = seconds;
-    }, 1000);
+        timeLeft.textContent = `${seconds} seconds`;
+        if(seconds < 1){
+            clearInterval(countdownID);
+            timeLeft.textContent = `Game over, man.`;
+            
+        }
+    }, 1000)
 }
 
 colorSelection.addEventListener('click', e => changeCardColor(e));
