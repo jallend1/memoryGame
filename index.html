@@ -9,25 +9,33 @@
 <body>
     <h1>Concentration</h1>
     <h3>Score: <span id="score"> 0 </span></h3>
-    <form id="colors">
-        <input type="radio" name="cardcolor" id="green">
-            <label for="green">Green</label>
-        <input type="radio" name="cardcolor" id="red">
-            <label for="red">Red</label>
-        <input type="radio" name="cardcolor" id="blue">
-            <label for="blue">Blue</label>
-    </form>
+    <h3>High Score: <span id="highscore">0</span></h3>
+    <h2>Timer: <span id="timeleft">60</span> seconds</h2>
     <div id="gamearea"></div>
     <form id="challenge">
         <input type="radio" name="difficulty" id="easy" value="3">
-            <label for="easy">Easy</label>
+        <label for="easy">Easy</label>
         <input type="radio" name="difficulty" id="normal" value="7">
-            <label for="normal">Normal</label>
+        <label for="normal">Normal</label>
         <input type="radio" name="difficulty" id="hard" value="14" checked>
-            <label for="hard">Hard</label>
+        <label for="hard">Hard</label>
     </form>
-
-
+    <form id="colors">
+        <input type="radio" name="cardcolor" value="green" id="green">
+            <label for="green">Green</label>
+        <input type="radio" name="cardcolor" value="red" id="red" checked>
+            <label for="red">Red</label>
+        <input type="radio" name="cardcolor" value="blue" id="blue">
+            <label for="blue">Blue</label>
+        <input type="radio" name="cardcolor" value="gray" id="gray">
+            <label for="purple">Gray</label>
+        <input type="radio" name="cardcolor" value="purple" id="purple">
+            <label for="purple">Purple</label>
+        <input type="radio" name="cardcolor" value="yellow" id="yellow">
+            <label for="yellow">Yellow</label>
+    </form>
+    
+    
     <button>Reset</button>
     <script src="app.js"></script>
 </body>

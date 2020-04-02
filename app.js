@@ -4,15 +4,20 @@ const gameArea = document.querySelector('#gamearea');
 const formDifficulty = document.querySelector('#challenge');
 const button = document.querySelector('button');
 const scoreBoard = document.querySelector('#score');
+const colorSelection = document.querySelector('#colors');
+const highScore = document.querySelector('#highscore');
 
+if(localStorage.highscore){
+    highScore.textContent = localStorage.highscore;
+}
 
+const timeLeft = document.querySelector('#timeleft');
 let difficulty = formDifficulty.difficulty.value;
-let cardColor = 'green';
-const cardBack = `images/card${cardColor}.png`;
+let cardColor = colorSelection.cardcolor.value;
+let cardBack = `images/card${cardColor}.png`;
 const revealedCards = [];                                                    // Array of the _revealed_ cards
 const cardNames = [];                                                         // Array of all the available cards
 let score = 0;
-
 
 function generateCards() {                                              // Puts duplicates of every card into an array and randomizes order
     cardNames.length = 0;
@@ -49,7 +54,7 @@ function checkMatch(){
         matchSuccess();
         updateScore(score);
     }else{                                                                              // If they don't match, run fail conditions
-        setTimeout(matchFail, 500);
+        setTimeout(matchFail, 250);
     }
 }
 
@@ -66,6 +71,10 @@ function matchSuccess(){                                                        
     displayedCard[revealedCards[1].index].classList.add('success');
     revealedCards.length = 0;
     score++;
+    if(score > parseInt(localStorage.highscore)){
+        localStorage.setItem('highscore', score);
+        highScore.textContent = score;
+    }
 }
 
 function changeDifficulty(e){
@@ -88,12 +97,33 @@ function resetGame(){
     populateCards();
     score = 0;
     updateScore(score);
+    timer(120);
 }
 
 function updateScore(newScore){                                                         // Updates score on screen
     scoreBoard.textContent = newScore;
 }
 
+function changeCardColor(){
+    let previousColor = cardColor;
+    cardColor = colorSelection.cardcolor.value;
+    cardBack = `images/card${cardColor}.png`;
+    const allCards = document.querySelectorAll('.card');
+    allCards.forEach(card => {                                                          // Resets all existing card backs to the new color
+        if(card.getAttribute('src') === `images/card${previousColor}.png`){
+            card.setAttribute('src', `images/card${cardColor}.png`);
+        }
+    })
+}
+
+function timer(seconds){
+    setInterval(function (){
+        seconds--;
+        timeLeft.textContent = seconds;
+    }, 1000);
+}
+
+colorSelection.addEventListener('click', e => changeCardColor(e));
 formDifficulty.addEventListener('click', e => changeDifficulty(e));
 button.addEventListener('click', resetGame);
 
