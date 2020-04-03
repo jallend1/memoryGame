@@ -71,20 +71,20 @@ function matchSuccess(){                                                        
     displayedCard[revealedCards[1].index].classList.add('success');
     revealedCards.length = 0;
     score++;
-    if(score > parseInt(localStorage.highscore)){
+    if(score > parseInt(localStorage.highscore)){                                       // Updates current high score if applicable
         localStorage.setItem('highscore', score);
         highScore.textContent = score;
     }
 }
 
-function changeDifficulty(e){
+function changeDifficulty(e){                                                           // Updates difficulty when radio button clicked and resets current game
     if (e.target.value){
         difficulty = e.target.value;
     }
     resetGame();
 }
 
-function clearCards(){
+function clearCards(){                                                                  // Removes all existing cards from page
     for(let i = 0; i < gameArea.children.length; i++){
         const displayedCard = document.querySelectorAll('.card');
         displayedCard.forEach(card => card.remove());
@@ -117,7 +117,13 @@ function changeCardColor(){
     })
 }
 
-
+function gameOver(){
+    timeLeft.textContent = `Game over, man.`;   
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        card.removeEventListener('click', revealCard);
+    });       
+}
 
 function timer(seconds){
     const countdownID = setInterval(() => {
@@ -125,8 +131,7 @@ function timer(seconds){
         timeLeft.textContent = `${seconds} seconds`;
         if(seconds < 1){
             clearInterval(countdownID);
-            timeLeft.textContent = `Game over, man.`;
-            
+            gameOver();
         }
     }, 1000)
 }
